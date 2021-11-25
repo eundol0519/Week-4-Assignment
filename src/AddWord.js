@@ -41,7 +41,7 @@ const AddWord = (props) => {
       explanationState.current.style.border = '1px solid white';
       exampleState.current.style.border = '3px solid #483D8B';
     } else {
-      dispatch(createDictionaryFB({ word: wordInfo, explanation: explanationInfo, example: exampleInfo }))
+      dispatch(createDictionaryFB({ word: wordInfo, explanation: explanationInfo, example: exampleInfo, memory: false }))
       history.push("/");
     }
   }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styled, { keyframes } from 'styled-components'
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,7 +44,7 @@ const UpdateWord = ({ location }) => {
       explanationState.current.style.border = '1px solid white';
       exampleState.current.style.border = '3px solid #483D8B';
     } else {
-      dispatch(updateDictionaryFB({ id: userInfo.list[index].id, word: wordInfo, explanation: explanationInfo, example: exampleInfo }))
+      dispatch(updateDictionaryFB({ id: userInfo.list[index].id, word: wordInfo, explanation: explanationInfo, example: exampleInfo, memory : location.state.memory }))
       history.push("/");
     }
   }

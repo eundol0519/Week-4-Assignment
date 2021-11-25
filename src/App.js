@@ -1,73 +1,36 @@
 import './App.css';
-import nullCardImg from './NullCardImg.png'
 import AddWord from './AddWord';
 import UpdateWord from './UpdateWord';
 import Spinner from './Spinner';
+import List from './List'
 
-import React from 'react';
+import Button from '@mui/material/Button';
+
+import React, { useState, dispatch } from 'react';
 import { Route, useHistory } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux'
-import { deleteDictionaryFB, loadDictionaryFB } from './redux/modules/dictionary'
-
-import Button from "@material-ui/core/Button";
+import { useSelector } from 'react-redux'
 
 function App() {
 
-  const dispatch = useDispatch();
+  let dictionary_list = useSelector((state) => state.dictionary);
+  let userInfo = dictionary_list.list
+  let is_loaded = dictionary_list.is_loaded
   let history = useHistory();
-  const dictionary_list = useSelector((state) => state.dictionary);
-  const userInfo = dictionary_list.list
-  const is_loaded = dictionary_list.is_loaded
 
-  const deleteBtn = (index) => {
-    if (window.confirm("삭제 하시겠습니까?")) {
-      dispatch(deleteDictionaryFB(userInfo[index].id))
-    }
-  }
-
-  React.useEffect(() => {
-    dispatch(loadDictionaryFB());
-  }, [userInfo])
+  const [msg, msg변경] = useState("all");
 
   return (
     <Flex>
       <Route path="/" exact>
         <Wrap className="App">
-          <Title>My Dictionary</Title>
-          <Container>
-            {
-              (userInfo.length != 0)
-                ?
-                userInfo.map((item, index) => {
-                  return (
-                    <Card key={index}>
-                      <SubTitle>[Word]</SubTitle>
-                      <Text>{item.word}</Text>
-                      <SubTitle>[Explanation]</SubTitle>
-                      <Text>{item.explanation}</Text>
-                      <SubTitle>[Example]</SubTitle>
-                      <Text>{item.example}</Text>
-                      <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button variant="outlined" size="medium" style={{ borderColor: "#FA8072", color: "#FA8072", marginRight: "1%" }}
-                          onClick={() => { deleteBtn(index) }}>삭제하기</Button>
-                        <Button variant="outlined" size="medium" style={{ borderColor: "#4682B4", color: "#4682B4" }}
-                          onClick={() => { history.push({ pathname: "/updateWord", state: { index: index, word: item.word, explanation: item.explanation, example: item.example } }) }}>수정하기</Button>
-                      </div>
-                    </Card>
-                  );
-                })
-                :
-                <NullCard>
-                  <img src={nullCardImg}></img>
-                  <div>
-                    아직 아무도<br />
-                    작성하지 않았어요!<br />
-                    😄😄😄😄😄😄😄😄😄😄
-                  </div>
-                </NullCard>
-            }
-          </Container>
+          <div style={{display:"flex"}}>
+            <Title style={{marginRight: '10%'}}>My Dictionary</Title>
+            <Button style={{color:'white', fontWeight: 'bold', marginTop: '10px'}} onClick={() => msg변경("all")}>모든 단어</Button>
+            <Button style={{color:'white', fontWeight: 'bold', marginTop: '10px'}} onClick={() => msg변경("completion")}>외운 단어</Button>
+            <Button style={{color:'white', fontWeight: 'bold', marginTop: '10px'}} onClick={() => msg변경("unCompletion")}>안 외운 단어</Button>
+          </div>
+          <List msg={msg}></List>
         </Wrap>
         <AddBtn className="addBtn" onClick={() => { history.push("/addWord") }}><AddBtnText>+</AddBtnText></AddBtn>
       </Route>
@@ -118,69 +81,11 @@ const Wrap = styled.div`
   border-radius: 10px;
 `
 
-const Container = styled.div`
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 500px;
-`
-
 const Title = styled.h3`
   text-align : left;
   margin-left: 10%;
   padding-top : 5px;
   color:white;
-`
-
-const Card = styled.div`
-  background-color: white;
-  border: 1px solid white;
-  border-radius : 5px;
-  width: 400px;
-  height: 260px;
-  margin:auto;
-  padding-left: 5%;
-  text-align : left;
-  margin-bottom : 5%;
-  padding-top : 1%;
-  font-size: 15px;
-`
-
-const NullCard = styled.div`
-  background-color: white;
-  border: 1px solid white;
-  border-radius : 5px;
-  width: 400px;
-  height: 270px;
-  margin:auto;
-  padding-left: 5%;
-  text-align : left;
-  margin-bottom : 5%;
-  font-size: 15px;
-  margin-top: 100px;
-
-  display: flex;
-
-  & img {
-    margin: 5%;
-    margin-left: 0px;
-    margin-bottom : 50px;
-  }
-
-  & div {
-    margin-top: 100px;
-  }
-`
-
-const SubTitle = styled.p`
-  font-size: 12px;
-  font-weight: bold;
-`
-
-const Text = styled.p`
-  word-break:break-all;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `
 
 const AddBtn = styled.div`
