@@ -14,7 +14,6 @@ import { useSelector } from 'react-redux'
 function App() {
 
   let dictionary_list = useSelector((state) => state.dictionary);
-  let userInfo = dictionary_list.list
   let is_loaded = dictionary_list.is_loaded
   let history = useHistory();
 
