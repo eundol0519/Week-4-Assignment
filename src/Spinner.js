@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { Eco } from "@material-ui/icons";
+// → 패키지 import
 
+import { Eco } from "@material-ui/icons";
+// → 머테리얼 UI import
+
+// ** 자식 컴포넌트 (Spinner)
 const Spinner = (props) => {
 
     return (
@@ -11,6 +15,7 @@ const Spinner = (props) => {
     );
 }
 
+// styled-components
 const Outter = styled.div`
   position: fixed;
   top: 0;

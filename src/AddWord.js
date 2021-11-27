@@ -3,18 +3,23 @@ import styled, { keyframes } from 'styled-components'
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { createDictionaryFB } from './redux/modules/dictionary'
+// → 패키지 import
 
 import Button from '@mui/material/Button';
+// → 머테리얼 UI import
 
+// ** 자식 컴포넌트 (AddWord)
 const AddWord = (props) => {
 
-  let wordRef = useRef('');
-  let explanationRef = useRef('');
-  let exampleRef = useRef('')
+  let wordRef = useRef(''); // 단어
+  let explanationRef = useRef(''); // 설명
+  let exampleRef = useRef(''); // 예시
+  // input의 value를 가져온다.
 
-  const wordState = useRef();
-  const explanationState = useRef();
-  const exampleState = useRef();
+  const wordCard = useRef();
+  const explanationCard = useRef();
+  const exampleCard = useRef();
+  // Card의 border를 변경 시키기 위해서 사용
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -23,23 +28,25 @@ const AddWord = (props) => {
 
     const wordInfo = wordRef.current.value;
     const explanationInfo = explanationRef.current.value;
-    const exampleInfo = exampleRef.current.value
-
+    const exampleInfo = exampleRef.current.value;
+    // input의 value를 가져온다.
+    
+    // 안적은 부분이 있다면 border style을 변경해서 글을 작성 하도록 한다.
     if (wordInfo === "") {
-      wordState.current.style.outline = 'none';
-      wordState.current.style.border = '3px solid #483D8B';
-      explanationState.current.style.border = '1px solid white';
-      exampleState.current.style.border = '1px solid white';
+      wordCard.current.style.outline = 'none';
+      wordCard.current.style.border = '3px solid #483D8B';
+      explanationCard.current.style.border = '1px solid white';
+      exampleCard.current.style.border = '1px solid white';
     } else if (explanationInfo === "") {
-      explanationState.current.style.outline = 'none';
-      wordState.current.style.border = '1px solid white';
-      explanationState.current.style.border = '3px solid #483D8B';
-      exampleState.current.style.border = '1px solid white';
+      explanationCard.current.style.outline = 'none';
+      wordCard.current.style.border = '1px solid white';
+      explanationCard.current.style.border = '3px solid #483D8B';
+      exampleCard.current.style.border = '1px solid white';
     } else if (exampleInfo === "") {
-      exampleState.current.style.outline = 'none';
-      wordState.current.style.border = '1px solid white';
-      explanationState.current.style.border = '1px solid white';
-      exampleState.current.style.border = '3px solid #483D8B';
+      exampleCard.current.style.outline = 'none';
+      wordCard.current.style.border = '1px solid white';
+      explanationCard.current.style.border = '1px solid white';
+      exampleCard.current.style.border = '3px solid #483D8B';
     } else {
       dispatch(createDictionaryFB({ word: wordInfo, explanation: explanationInfo, example: exampleInfo, memory: false }))
       history.push("/");
@@ -50,15 +57,15 @@ const AddWord = (props) => {
     <Flex>
       <Wrap>
         <Title>Add Words</Title>
-        <Card ref={wordState}>
+        <Card ref={wordCard}>
           <SubTitle>Word</SubTitle>
           <Input ref={wordRef} type="text"/>
         </Card>
-        <Card ref={explanationState}>
+        <Card ref={explanationCard}>
           <SubTitle>Explanation</SubTitle>
           <Input ref={explanationRef} type="text"/>
         </Card>
-        <Card ref={exampleState}>
+        <Card ref={exampleCard}>
           <SubTitle>Example</SubTitle>
           <Input ref={exampleRef} type="text"/>
         </Card>

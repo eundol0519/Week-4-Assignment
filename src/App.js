@@ -3,21 +3,28 @@ import AddWord from './AddWord';
 import UpdateWord from './UpdateWord';
 import Spinner from './Spinner';
 import List from './List'
+// → 자식 컴포넌트 import
 
 import Button from '@mui/material/Button';
+// → 머테리얼 UI import
 
 import React, { useState, dispatch } from 'react';
 import { Route, useHistory } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components';
 import { useSelector } from 'react-redux'
+import { CONSTANTS } from '@firebase/util';
+// → 패키지 import
 
+// ** 부모 component **
 function App() {
 
-  let dictionary_list = useSelector((state) => state.dictionary);
-  let is_loaded = dictionary_list.is_loaded
-  let history = useHistory();
+  const dictionary_list = useSelector((state) => state.dictionary);
+  // redux 데이터 불러오기
+  const history = useHistory();
 
   const [msg, msg변경] = useState("all");
+  // 모두 보기, 외운 단어 보기, 안외운 단어 보기 구별 해주는 state
+  // state 선언은 부모에 선언 해줘야 한다.
 
   return (
     <Flex>
@@ -34,8 +41,8 @@ function App() {
         <AddBtn className="addBtn" onClick={() => { history.push("/addWord") }}><AddBtnText>+</AddBtnText></AddBtn>
       </Route>
 
-      {
-        !is_loaded && <Spinner></Spinner>
+      { 
+        !dictionary_list.is_loaded && <Spinner></Spinner>
       }
       <Route path="/addWord" component={AddWord}></Route>
       <Route path="/updateWord" component={UpdateWord}></Route>

@@ -1,20 +1,19 @@
-// widgets.js
-
 import { db } from '../../firebase'
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "@firebase/firestore";
-import { async } from '@firebase/util';
 
-// Actions
+// ** 초깃값 설정 **
+const initialState = { is_loaded: false, list: [] }
+
+
+// ** Actions ** 
 const LOAD = 'dictionary/LOAD';
 const CREATE = 'dictionary/CREATE';
 const DELETE = 'dictionary/DELETE';
 const UPDATE = 'dictionary/UPDATE';
 const COMPLETION = 'dictionary/COMPLETION';
 
-// 초깃값 설정
-const initialState = { is_loaded: false, list: [] }
 
-// Action Creators
+// ** Action Creators **
 export function loadDictionary(dictionary_list) {
     return {
         type: LOAD,
@@ -52,7 +51,8 @@ export function completionDictionary(dictionary_list, dictionary_index) {
     }
 }
 
-// Middlewares
+
+// ** Middlewares **
 export const loadDictionaryFB = () => { // firestore의 데이터 store에 넣기
     return async function (dispatch) {
 
@@ -161,28 +161,23 @@ export const completionDictionaryFB = (dictionary_list) => {
 }
 
 
-// Reducer
+// ** Reducer **
 export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
 
+        // 불러오기 기능
         case 'dictionary/LOAD':
             return { list: action.dictionary_list, is_loaded: true };
 
+        // 추가 기능
         case 'dictionary/CREATE':
 
             const new_dictionary_list = { is_loaded: state.is_loaded, list: [...state.list, action.dictionary_info] }
 
             return new_dictionary_list;
 
+        // 삭제 기능
         case 'dictionary/DELETE':
-
-            // console.log(state) =>
-            // (3)[{… }, {… }, {… }]
-            // 0: { word: 's', explanation: 's', example: 's' }
-            // 1: { word: 'd', explanation: 'd', example: 'd' }
-            // 2: { word: 'd', explanation: 'd', example: 'd' }
-            // length: 3
-            // [[Prototype]]: Array(0)
 
             const new_dictionary_delete = [];
             for (let i = 0; i < state.length; i++) {
@@ -193,6 +188,7 @@ export default function reducer(state = initialState, action = {}) {
 
             return { ...state, list: new_dictionary_delete };
 
+        // 수정 기능
         case 'dictionary/UPDATE':
 
             const new_dictionary_update = state.list.map((item, index) => {
@@ -209,6 +205,7 @@ export default function reducer(state = initialState, action = {}) {
 
             return { ...state, list: new_dictionary_update }
 
+        // 완료 기능
         case 'dictionary/COMPLETION':
 
             const new_dictionary_completion = state.list.map((item, index) => {

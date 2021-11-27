@@ -3,48 +3,58 @@ import styled, { keyframes } from 'styled-components'
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateDictionaryFB } from './redux/modules/dictionary'
+// → 패키지 import
 
 import Button from '@mui/material/Button';
+// → 머테리얼 UI import
 
+// ** 자식 컴포넌트 (UpdateWord)
 const UpdateWord = ({ location }) => {
 
-  let wordRef = useRef('');
-  let explanationRef = useRef('');
-  let exampleRef = useRef('')
+  let wordRef = useRef(''); // 단어
+  let explanationRef = useRef(''); // 설명
+  let exampleRef = useRef('') // 예시
+  // input의 value를 가져온다.
 
-  const wordState = useRef();
-  const explanationState = useRef();
-  const exampleState = useRef();
+  const wordCard = useRef();
+  const explanationCard = useRef();
+  const exampleCard = useRef();
+  // Card의 border를 변경 시키기 위해서 사용
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   const userInfo = useSelector((state) => state.dictionary);
+  // redux 데이터 불러오기
   const index = location.state.index
+  // 글 수정 시 해당 글의 index를 저장하는 변수
 
+  // 수정 기능 함수
   const updateInfo = () => {
 
     const wordInfo = wordRef.current.value;
     const explanationInfo = explanationRef.current.value;
-    const exampleInfo = exampleRef.current.value
+    const exampleInfo = exampleRef.current.value;
+    // input의 value를 가져온다.
 
+    // 안적은 부분이 있다면 border style을 변경해서 글을 작성 하도록 한다.
     if (wordInfo === "") {
-      wordState.current.style.outline = 'none';
-      wordState.current.style.border = '3px solid #483D8B';
-      explanationState.current.style.border = '1px solid white';
-      exampleState.current.style.border = '1px solid white';
+      wordCard.current.style.outline = 'none';
+      wordCard.current.style.border = '3px solid #483D8B';
+      explanationCard.current.style.border = '1px solid white';
+      exampleCard.current.style.border = '1px solid white';
     } else if (explanationInfo === "") {
-      explanationState.current.style.outline = 'none';
-      wordState.current.style.border = '1px solid white';
-      explanationState.current.style.border = '3px solid #483D8B';
-      exampleState.current.style.border = '1px solid white';
+      explanationCard.current.style.outline = 'none';
+      wordCard.current.style.border = '1px solid white';
+      explanationCard.current.style.border = '3px solid #483D8B';
+      exampleCard.current.style.border = '1px solid white';
     } else if (exampleInfo === "") {
-      exampleState.current.style.outline = 'none';
-      wordState.current.style.border = '1px solid white';
-      explanationState.current.style.border = '1px solid white';
-      exampleState.current.style.border = '3px solid #483D8B';
+      exampleCard.current.style.outline = 'none';
+      wordCard.current.style.border = '1px solid white';
+      explanationCard.current.style.border = '1px solid white';
+      exampleCard.current.style.border = '3px solid #483D8B';
     } else {
-      dispatch(updateDictionaryFB({ id: userInfo.list[index].id, word: wordInfo, explanation: explanationInfo, example: exampleInfo, memory : location.state.memory }))
+      dispatch(updateDictionaryFB({ id: userInfo.list[index].id, word: wordInfo, explanation: explanationInfo, example: exampleInfo, memory: location.state.memory }))
       history.push("/");
     }
   }
@@ -53,15 +63,15 @@ const UpdateWord = ({ location }) => {
     <Flex>
       <Wrap>
         <Title>Edir Words</Title>
-        <Card ref={wordState}>
+        <Card ref={wordCard}>
           <SubTitle>Word</SubTitle>
           <Input ref={wordRef} type="text" defaultValue={location.state.word} />
         </Card>
-        <Card ref={explanationState}>
+        <Card ref={explanationCard}>
           <SubTitle>Explanation</SubTitle>
           <Input ref={explanationRef} type="text" defaultValue={location.state.explanation} />
         </Card>
-        <Card ref={exampleState}>
+        <Card ref={exampleCard}>
           <SubTitle>Example</SubTitle>
           <Input ref={exampleRef} type="text" defaultValue={location.state.example} />
           {/* 기본값 설정 할 때 onClick 함수를 사용하는 경우 value가 아니라 defaultValue를 사용 해야 한다고 오류가 떴다. */}

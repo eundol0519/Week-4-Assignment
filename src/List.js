@@ -1,21 +1,29 @@
 import React from 'react';
-import nullCardImg from './NullCardImg.png'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadDictionaryFB, deleteDictionaryFB, completionDictionaryFB } from './redux/modules/dictionary'
+// → 패키지 import
 
+import nullCardImg from './NullCardImg.png'
 import Button from "@material-ui/core/Button";
+// → 머테리얼 UI import
 
+// ** 자식 컴포넌트 - List **
 const List = (props) => {
 
     let dictionary_list = useSelector((state) => state.dictionary);
-    let userInfo;
+    // redux 데이터 불러오기
     let msg = props.msg
+    // 부모 state에서 받아온 msg
+    let userInfo;
+    // 부모 state에서 받아온 msg를 기준으로
+    // 모두 보여 줄 지 외운 단어만 보여 줄 지 안외운 단어만 보여줄 지에 대한 데이터를 담는 변수
 
     let dispatch = useDispatch();
     let history = useHistory();
 
+    // msg를 기준으로 userInfo에 들어가는 데이터를 변환한다.
     if (msg === 'all') {
         // 모든 단어 출력
         userInfo = dictionary_list.list
@@ -31,13 +39,14 @@ const List = (props) => {
         })
     }
 
-
+    // 삭제 기능 함수
     const deleteBtn = (index) => {
         if (window.confirm("삭제 하시겠습니까?")) {
             dispatch(deleteDictionaryFB(userInfo[index].id))
         }
-    }
+    }   
 
+    // 완료 기능 함수
     const completionBtn = (index) => {
 
         const idDate = userInfo[index].id;
@@ -49,6 +58,9 @@ const List = (props) => {
         history.push("/");
     }
 
+    // useEffect
+    // 처음 컴포넌트가 생성 되었을 때 fireStore의 데이터를 불러오고
+    // userInfo(redux)의 데이터가 바뀌면 다시 fireStore에서 데이터를 불러온다.
     React.useEffect(() => {
         dispatch(loadDictionaryFB());
     }, [userInfo])
@@ -95,7 +107,6 @@ const List = (props) => {
 }
 
 // styled-components
-
 const Container = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
