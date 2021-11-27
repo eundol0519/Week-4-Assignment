@@ -43,6 +43,7 @@ const List = (props) => {
     const deleteBtn = (index) => {
         if (window.confirm("삭제 하시겠습니까?")) {
             dispatch(deleteDictionaryFB(userInfo[index].id))
+            dispatch(loadDictionaryFB());
         }
     }   
 
@@ -55,15 +56,16 @@ const List = (props) => {
         const exampleData = userInfo[index].example;
 
         dispatch(completionDictionaryFB({ id: idDate, word: wordData, explanation: exmplationData, example: exampleData, memory: true }))
+        dispatch(loadDictionaryFB());
         history.push("/");
     }
 
     // useEffect
     // 처음 컴포넌트가 생성 되었을 때 fireStore의 데이터를 불러오고
     // userInfo(redux)의 데이터가 바뀌면 다시 fireStore에서 데이터를 불러온다.
-    React.useEffect(() => {
+    React.useEffect(() => { // async 쓰는 방법도 있음
         dispatch(loadDictionaryFB());
-    }, [userInfo])
+    }, []) // userInfo 넣으면 무한로딩이 일어나서, 데이터를 너무 잡아먹음
 
     return (
         <Container>
